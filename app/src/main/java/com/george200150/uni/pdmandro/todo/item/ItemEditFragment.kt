@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 import com.george200150.uni.pdmandro.R
 import com.george200150.uni.pdmandro.core.TAG
+import com.george200150.uni.pdmandro.todo.data.Item
 
 class ItemEditFragment : Fragment() {
     companion object {
@@ -21,6 +21,7 @@ class ItemEditFragment : Fragment() {
 
     private lateinit var viewModel: ItemEditViewModel
     private var itemId: String? = null
+    private var item: Item? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,29 +42,23 @@ class ItemEditFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_item_edit, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.v(TAG, "onViewCreated")
-        item_text.setText(itemId)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.v(TAG, "onActivityCreated")
         setupViewModel()
         fab.setOnClickListener {
             Log.v(TAG, "save item")
-            viewModel.saveOrUpdateItem(item_text.text.toString())
+            val i = item
+            if (i != null) {
+                i.text = item_text.text.toString()
+                viewModel.saveOrUpdateItem(i)
+            }
         }
 
     }
 
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this).get(ItemEditViewModel::class.java)
-        viewModel.item.observe(viewLifecycleOwner, { item ->
-            Log.v(TAG, "update items")
-            item_text.setText(item.text)
-        })
         viewModel.fetching.observe(viewLifecycleOwner, { fetching ->
             Log.v(TAG, "update fetching")
             progress.visibility = if (fetching) View.VISIBLE else View.GONE
@@ -78,15 +73,23 @@ class ItemEditFragment : Fragment() {
                 }
             }
         })
-        viewModel.completed.observe(viewLifecycleOwner, Observer { completed ->
+        viewModel.completed.observe(viewLifecycleOwner, { completed ->
             if (completed) {
                 Log.v(TAG, "completed, navigate back")
-                findNavController().navigateUp()
+                findNavController().popBackStack()
             }
         })
         val id = itemId
-        if (id != null) {
-            viewModel.loadItem(id)
+        if (id == null) {
+            item = Item("", "")
+        } else {
+            viewModel.getItemById(id).observe(viewLifecycleOwner, {
+                Log.v(TAG, "update items")
+                if (it != null) {
+                    item = it
+                    item_text.setText(it.text)
+                }
+            })
         }
     }
 }

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_item_list.*
 import com.george200150.uni.pdmandro.R
+import com.george200150.uni.pdmandro.auth.data.AuthRepository
 import com.george200150.uni.pdmandro.core.TAG
 
 class ItemListFragment : Fragment() {
@@ -32,10 +33,14 @@ class ItemListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.v(TAG, "onActivityCreated")
+        if (!AuthRepository.isLoggedIn) {
+            findNavController().navigate(R.id.fragment_login)
+            return;
+        }
         setupItemList()
         fab.setOnClickListener {
             Log.v(TAG, "add new item")
-            findNavController().navigate(R.id.ItemEditFragment)
+            findNavController().navigate(R.id.fragment_item_edit)
         }
     }
 
@@ -58,7 +63,7 @@ class ItemListFragment : Fragment() {
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
             }
         })
-        itemsModel.loadItems()
+        itemsModel.refresh()
     }
 
     override fun onDestroy() {

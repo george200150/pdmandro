@@ -30,8 +30,8 @@ class ItemListAdapter(
     init {
         onItemClick = View.OnClickListener { view ->
             val item = view.tag as Item
-            fragment.findNavController().navigate(R.id.ItemEditFragment, Bundle().apply {
-                putString(ItemEditFragment.ITEM_ID, item.id)
+            fragment.findNavController().navigate(R.id.fragment_item_edit, Bundle().apply {
+                putString(ItemEditFragment.ITEM_ID, item._id)
             })
         }
     }
