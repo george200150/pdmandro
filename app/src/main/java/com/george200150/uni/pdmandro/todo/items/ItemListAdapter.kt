@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.view_item.view.*
 import com.george200150.uni.pdmandro.R
+import kotlinx.android.synthetic.main.view_item.view.*
 import com.george200150.uni.pdmandro.core.TAG
 import com.george200150.uni.pdmandro.todo.data.Item
 import com.george200150.uni.pdmandro.todo.item.ItemEditFragment
@@ -32,6 +32,10 @@ class ItemListAdapter(
             val item = view.tag as Item
             fragment.findNavController().navigate(R.id.fragment_item_edit, Bundle().apply {
                 putString(ItemEditFragment.ITEM_ID, item._id)
+                putBoolean(ItemEditFragment.FLOWERS,item.hasFlowers)
+                putString(ItemEditFragment.BLOOM,item.bloomDate)
+                putString(ItemEditFragment.LOCATION,item.location)
+                putString(ItemEditFragment.PHOTO,item.photo)
             })
         }
     }
@@ -47,7 +51,7 @@ class ItemListAdapter(
         Log.v(TAG, "onBindViewHolder $position")
         val item = items[position]
         holder.itemView.tag = item
-        holder.textView.text = item.text
+        holder.textView.text = item.name
         holder.itemView.setOnClickListener(onItemClick)
     }
 

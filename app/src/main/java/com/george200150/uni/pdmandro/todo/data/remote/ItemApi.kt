@@ -4,20 +4,21 @@ import retrofit2.http.*
 import com.george200150.uni.pdmandro.core.Api
 import com.george200150.uni.pdmandro.todo.data.Item
 
+
 object ItemApi {
     interface Service {
-        @GET("/api/item")
+        @GET("/api/plant")
         suspend fun find(): List<Item>
 
-        @GET("/api/item/{id}")
+        @GET("/api/plant/{id}")
         suspend fun read(@Path("id") itemId: String): Item;
 
         @Headers("Content-Type: application/json")
-        @POST("/api/item")
+        @POST("/api/plant")
         suspend fun create(@Body item: Item): Item
 
         @Headers("Content-Type: application/json")
-        @PUT("/api/item/{id}")
+        @PUT("/api/plant/{id}")
         suspend fun update(@Path("id") itemId: String, @Body item: Item): Item
     }
 

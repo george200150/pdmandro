@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Basic Activity App</string>
+    <string name="app_name">Car app</string>
     <string name="action_settings">Settings</string>
     <string name="item_list_fragment_label">Item List</string>
     <string name="item_edit_fragment_label">Item Edit</string>
@@ -13,4 +13,9 @@
     <string name="sign_in">Sign In</string>
     <string name="item_list_fragment">Item list fragment</string>
     <string name="item_edit_fragment">Item edit fragment</string>
+    <string name="name">Name</string>
+    <string name="bloom_date">Bloom Date</string>
+    <string name="hasFlowers">Has Flowers</string>
+    <string name="location">Location</string>
+    <string name="photo">Photo</string>
 </resources>

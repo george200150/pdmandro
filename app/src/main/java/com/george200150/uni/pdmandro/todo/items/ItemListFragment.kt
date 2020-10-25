@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_item_list.*
 import com.george200150.uni.pdmandro.R
+import kotlinx.android.synthetic.main.fragment_item_list.*
 import com.george200150.uni.pdmandro.auth.data.AuthRepository
 import com.george200150.uni.pdmandro.core.TAG
+import com.george200150.uni.pdmandro.todo.items.ItemListViewModel
 
 class ItemListFragment : Fragment() {
     private lateinit var itemListAdapter: ItemListAdapter
@@ -48,22 +50,22 @@ class ItemListFragment : Fragment() {
         itemListAdapter = ItemListAdapter(this)
         item_list.adapter = itemListAdapter
         itemsModel = ViewModelProvider(this).get(ItemListViewModel::class.java)
-        itemsModel.items.observe(viewLifecycleOwner, { items ->
+        itemsModel.items.observe(viewLifecycleOwner) { items ->
             Log.v(TAG, "update items")
             itemListAdapter.items = items
-        })
-        itemsModel.loading.observe(viewLifecycleOwner, { loading ->
+        }
+        itemsModel.loading.observe(viewLifecycleOwner) { loading ->
             Log.i(TAG, "update loading")
             progress.visibility = if (loading) View.VISIBLE else View.GONE
-        })
-        itemsModel.loadingError.observe(viewLifecycleOwner, { exception ->
+        }
+        itemsModel.loadingError.observe(viewLifecycleOwner) { exception ->
             if (exception != null) {
                 Log.i(TAG, "update loading error")
                 val message = "Loading exception ${exception.message}"
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
             }
-        })
-        itemsModel.refresh()
+        }
+        itemsModel.loadItems()
     }
 
     override fun onDestroy() {

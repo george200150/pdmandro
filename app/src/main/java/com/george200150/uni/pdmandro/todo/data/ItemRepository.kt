@@ -1,36 +1,43 @@
 package com.george200150.uni.pdmandro.todo.data
 
-import androidx.lifecycle.LiveData
-import com.george200150.uni.pdmandro.todo.data.local.ItemDao
 import com.george200150.uni.pdmandro.core.Result
 import com.george200150.uni.pdmandro.todo.data.remote.ItemApi
 
-class ItemRepository(private val itemDao: ItemDao) {
+object ItemRepository {
+    private var cachedItems: MutableList<Item>? = null;
 
-    val items = itemDao.getAll()
-
-    suspend fun refresh(): Result<Boolean> {
+    suspend fun loadAll(): Result<List<Item>> {
+        if (cachedItems != null) {
+            return Result.Success(cachedItems as List<Item>);
+        }
         try {
             val items = ItemApi.service.find()
-            for (item in items) {
-                itemDao.insert(item)
-            }
-            return Result.Success(true)
-        } catch(e: Exception) {
+            cachedItems = mutableListOf()
+            cachedItems?.addAll(items)
+            return Result.Success(cachedItems as List<Item>)
+        } catch (e: Exception) {
             return Result.Error(e)
         }
     }
 
-    fun getById(itemId: String): LiveData<Item> {
-        return itemDao.getById(itemId)
+    suspend fun load(itemId: String): Result<Item> {
+        val item = cachedItems?.find { it._id == itemId }
+        if (item != null) {
+            return Result.Success(item)
+        }
+        try {
+            return Result.Success(ItemApi.service.read(itemId))
+        } catch (e: Exception) {
+            return Result.Error(e)
+        }
     }
 
     suspend fun save(item: Item): Result<Item> {
         try {
             val createdItem = ItemApi.service.create(item)
-            itemDao.insert(createdItem)
+            cachedItems?.add(createdItem)
             return Result.Success(createdItem)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             return Result.Error(e)
         }
     }
@@ -38,9 +45,12 @@ class ItemRepository(private val itemDao: ItemDao) {
     suspend fun update(item: Item): Result<Item> {
         try {
             val updatedItem = ItemApi.service.update(item._id, item)
-            itemDao.update(updatedItem)
+            val index = cachedItems?.indexOfFirst { it._id == item._id }
+            if (index != null) {
+                cachedItems?.set(index, updatedItem)
+            }
             return Result.Success(updatedItem)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             return Result.Error(e)
         }
     }
