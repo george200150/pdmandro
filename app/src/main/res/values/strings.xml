@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Car app</string>
+    <string name="app_name">PDMAndro</string>
     <string name="action_settings">Settings</string>
     <string name="item_list_fragment_label">Item List</string>
     <string name="item_edit_fragment_label">Item Edit</string>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".todo.item.ItemEditFragment">
+    tools:context=".todo.plant.PlantEditFragment">
 
     <ProgressBar
         android:id="@+id/progress"

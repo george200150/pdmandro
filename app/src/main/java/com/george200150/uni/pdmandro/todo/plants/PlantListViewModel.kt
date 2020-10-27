@@ -1,4 +1,4 @@
-package com.george200150.uni.pdmandro.todo.items
+package com.george200150.uni.pdmandro.todo.plants
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,15 +8,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import com.george200150.uni.pdmandro.core.Result
 import com.george200150.uni.pdmandro.core.TAG
-import com.george200150.uni.pdmandro.todo.data.Item
-import com.george200150.uni.pdmandro.todo.data.ItemRepository
+import com.george200150.uni.pdmandro.todo.data.Plant
+import com.george200150.uni.pdmandro.todo.data.PlantRepository
 
-class ItemListViewModel : ViewModel() {
-    private val mutableItems = MutableLiveData<List<Item>>().apply { value = emptyList() }
+class PlantListViewModel : ViewModel() {
+    private val mutableItems = MutableLiveData<List<Plant>>().apply { value = emptyList() }
     private val mutableLoading = MutableLiveData<Boolean>().apply { value = false }
     private val mutableException = MutableLiveData<Exception>().apply { value = null }
 
-    val items: LiveData<List<Item>> = mutableItems
+    val items: LiveData<List<Plant>> = mutableItems
     val loading: LiveData<Boolean> = mutableLoading
     val loadingError: LiveData<Exception> = mutableException
 
@@ -25,7 +25,7 @@ class ItemListViewModel : ViewModel() {
             Log.v(TAG, "loadItems...");
             mutableLoading.value = true
             mutableException.value = null
-            when (val result = ItemRepository.loadAll()) {
+            when (val result = PlantRepository.loadAll()) {
                 is Result.Success -> {
                     Log.d(TAG, "loadItems succeeded");
                     mutableItems.value = result.data

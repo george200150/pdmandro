@@ -1,6 +1,6 @@
 package com.george200150.uni.pdmandro.todo.data
 
-data class Item(
+data class Plant(
     val _id: String,
     var name: String,
     var hasFlowers: Boolean,

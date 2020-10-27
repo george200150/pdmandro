@@ -1,4 +1,4 @@
-package com.george200150.uni.pdmandro.todo.items
+package com.george200150.uni.pdmandro.todo.plants
 
 import android.os.Bundle
 import android.util.Log
@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.george200150.uni.pdmandro.R
 import kotlinx.android.synthetic.main.view_item.view.*
 import com.george200150.uni.pdmandro.core.TAG
-import com.george200150.uni.pdmandro.todo.data.Item
-import com.george200150.uni.pdmandro.todo.item.ItemEditFragment
+import com.george200150.uni.pdmandro.todo.data.Plant
+import com.george200150.uni.pdmandro.todo.plant.PlantEditFragment
 
-class ItemListAdapter(
+class PlantListAdapter(
     private val fragment: Fragment
-) : RecyclerView.Adapter<ItemListAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<PlantListAdapter.ViewHolder>() {
 
-    var items = emptyList<Item>()
+    var items = emptyList<Plant>()
         set(value) {
             field = value
             notifyDataSetChanged();
@@ -29,13 +29,13 @@ class ItemListAdapter(
 
     init {
         onItemClick = View.OnClickListener { view ->
-            val item = view.tag as Item
+            val item = view.tag as Plant
             fragment.findNavController().navigate(R.id.fragment_item_edit, Bundle().apply {
-                putString(ItemEditFragment.ITEM_ID, item._id)
-                putBoolean(ItemEditFragment.FLOWERS,item.hasFlowers)
-                putString(ItemEditFragment.BLOOM,item.bloomDate)
-                putString(ItemEditFragment.LOCATION,item.location)
-                putString(ItemEditFragment.PHOTO,item.photo)
+                putString(PlantEditFragment.ITEM_ID, item._id)
+                putBoolean(PlantEditFragment.FLOWERS,item.hasFlowers)
+                putString(PlantEditFragment.BLOOM,item.bloomDate)
+                putString(PlantEditFragment.LOCATION,item.location)
+                putString(PlantEditFragment.PHOTO,item.photo)
             })
         }
     }

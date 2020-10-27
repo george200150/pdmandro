@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/fragment_item_list"
-        android:name="com.george200150.uni.pdmandro.todo.items.ItemListFragment"
+        android:name="com.george200150.uni.pdmandro.todo.plants.PlantListFragment"
         android:label="@string/item_list_fragment_label"
         tools:layout="@layout/fragment_item_list">
 
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_item_edit"
-        android:name="com.george200150.uni.pdmandro.todo.item.ItemEditFragment"
+        android:name="com.george200150.uni.pdmandro.todo.plant.PlantEditFragment"
         android:label="@string/item_edit_fragment_label"
         tools:layout="@layout/fragment_item_edit">
 

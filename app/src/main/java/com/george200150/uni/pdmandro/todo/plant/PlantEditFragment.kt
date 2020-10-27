@@ -1,4 +1,4 @@
-package com.george200150.uni.pdmandro.todo.item
+package com.george200150.uni.pdmandro.todo.plant
 
 import android.os.Build
 import android.os.Bundle
@@ -17,7 +17,7 @@ import com.george200150.uni.pdmandro.R
 import com.george200150.uni.pdmandro.core.TAG
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 
-class ItemEditFragment : Fragment() {
+class PlantEditFragment : Fragment() {
     companion object {
         const val ITEM_ID = "_ID"
         const val NAME = "flower_name"
@@ -27,7 +27,7 @@ class ItemEditFragment : Fragment() {
         const val PHOTO = "photo"
     }
 
-    private lateinit var viewModel: ItemEditViewModel
+    private lateinit var viewModel: PlantEditViewModel
     private var plantId: String? = null
     private var plantName: String? = null
     private var hasFlowers: Boolean = false
@@ -90,7 +90,7 @@ class ItemEditFragment : Fragment() {
         Log.v(TAG, "onActivityCreated")
         setupViewModel()
         fab.setOnClickListener {
-            Log.v(TAG, "save item")
+            Log.v(TAG, "save plant")
             viewModel.saveOrUpdateItem(
                 plant_name.text.toString(),
                 plant_has_flowers.isChecked,
@@ -103,8 +103,8 @@ class ItemEditFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProvider(this).get(ItemEditViewModel::class.java)
-        viewModel.item.observe(viewLifecycleOwner) { item ->
+        viewModel = ViewModelProvider(this).get(PlantEditViewModel::class.java)
+        viewModel.plant.observe(viewLifecycleOwner) { item ->
             Log.v(TAG, "update items")
             plant_name.setText(item.name)
         }

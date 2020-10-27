@@ -1,4 +1,4 @@
-package com.george200150.uni.pdmandro.todo.item
+package com.george200150.uni.pdmandro.todo.plant
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,16 +8,16 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import com.george200150.uni.pdmandro.core.Result
 import com.george200150.uni.pdmandro.core.TAG
-import com.george200150.uni.pdmandro.todo.data.Item
-import com.george200150.uni.pdmandro.todo.data.ItemRepository
+import com.george200150.uni.pdmandro.todo.data.Plant
+import com.george200150.uni.pdmandro.todo.data.PlantRepository
 
-class ItemEditViewModel : ViewModel() {
-    private val mutableItem = MutableLiveData<Item>().apply { value = Item("", "", hasFlowers = false, bloomDate = "", location = "", photo = "") }
+class PlantEditViewModel : ViewModel() {
+    private val mutableItem = MutableLiveData<Plant>().apply { value = Plant("", "", hasFlowers = false, bloomDate = "", location = "", photo = "") }
     private val mutableFetching = MutableLiveData<Boolean>().apply { value = false }
     private val mutableCompleted = MutableLiveData<Boolean>().apply { value = false }
     private val mutableException = MutableLiveData<Exception>().apply { value = null }
 
-    val item: LiveData<Item> = mutableItem
+    val plant: LiveData<Plant> = mutableItem
     val fetching: LiveData<Boolean> = mutableFetching
     val fetchingError: LiveData<Exception> = mutableException
     val completed: LiveData<Boolean> = mutableCompleted
@@ -27,7 +27,7 @@ class ItemEditViewModel : ViewModel() {
             Log.v(TAG, "loadItem...")
             mutableFetching.value = true
             mutableException.value = null
-            when (val result = ItemRepository.load(itemId)) {
+            when (val result = PlantRepository.load(itemId)) {
                 is Result.Success -> {
                     Log.d(TAG, "loadItem succeeded")
                     mutableItem.value = result.data
@@ -53,11 +53,11 @@ class ItemEditViewModel : ViewModel() {
 
             mutableFetching.value = true
             mutableException.value = null
-            val result: Result<Item>
+            val result: Result<Plant>
             if (item._id.isNotEmpty()) {
-                result = ItemRepository.update(item)
+                result = PlantRepository.update(item)
             } else {
-                result = ItemRepository.save(item)
+                result = PlantRepository.save(item)
             }
             when (result) {
                 is Result.Success -> {

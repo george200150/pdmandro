@@ -1,4 +1,4 @@
-package com.george200150.uni.pdmandro.todo.items
+package com.george200150.uni.pdmandro.todo.plants
 
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +14,10 @@ import com.george200150.uni.pdmandro.R
 import kotlinx.android.synthetic.main.fragment_item_list.*
 import com.george200150.uni.pdmandro.auth.data.AuthRepository
 import com.george200150.uni.pdmandro.core.TAG
-import com.george200150.uni.pdmandro.todo.items.ItemListViewModel
 
-class ItemListFragment : Fragment() {
-    private lateinit var itemListAdapter: ItemListAdapter
-    private lateinit var itemsModel: ItemListViewModel
+class PlantListFragment : Fragment() {
+    private lateinit var plantListAdapter: PlantListAdapter
+    private lateinit var itemsModel: PlantListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,18 +40,18 @@ class ItemListFragment : Fragment() {
         }
         setupItemList()
         fab.setOnClickListener {
-            Log.v(TAG, "add new item")
+            Log.v(TAG, "add new plant")
             findNavController().navigate(R.id.fragment_item_edit)
         }
     }
 
     private fun setupItemList() {
-        itemListAdapter = ItemListAdapter(this)
-        item_list.adapter = itemListAdapter
-        itemsModel = ViewModelProvider(this).get(ItemListViewModel::class.java)
+        plantListAdapter = PlantListAdapter(this)
+        item_list.adapter = plantListAdapter
+        itemsModel = ViewModelProvider(this).get(PlantListViewModel::class.java)
         itemsModel.items.observe(viewLifecycleOwner) { items ->
             Log.v(TAG, "update items")
-            itemListAdapter.items = items
+            plantListAdapter.items = items
         }
         itemsModel.loading.observe(viewLifecycleOwner) { loading ->
             Log.i(TAG, "update loading")
