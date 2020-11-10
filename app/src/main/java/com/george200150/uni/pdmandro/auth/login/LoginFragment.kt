@@ -9,11 +9,11 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_login.*
 import com.george200150.uni.pdmandro.R
 import com.george200150.uni.pdmandro.core.Result
-import androidx.lifecycle.observe
+import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment() {
 

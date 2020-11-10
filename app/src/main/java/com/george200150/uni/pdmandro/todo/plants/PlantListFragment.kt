@@ -11,9 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.george200150.uni.pdmandro.R
-import kotlinx.android.synthetic.main.fragment_item_list.*
 import com.george200150.uni.pdmandro.auth.data.AuthRepository
+import com.george200150.uni.pdmandro.core.Constants
 import com.george200150.uni.pdmandro.core.TAG
+import kotlinx.android.synthetic.main.fragment_item_list.*
 
 class PlantListFragment : Fragment() {
     private lateinit var plantListAdapter: PlantListAdapter
@@ -34,7 +35,8 @@ class PlantListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.v(TAG, "onActivityCreated")
-        if (!AuthRepository.isLoggedIn) {
+        if (Constants.instance()?.fetchValueString("token")==null) {
+        //if (!AuthRepository.isLoggedIn) {
             findNavController().navigate(R.id.fragment_login)
             return;
         }
@@ -42,6 +44,11 @@ class PlantListFragment : Fragment() {
         fab.setOnClickListener {
             Log.v(TAG, "add new plant")
             findNavController().navigate(R.id.fragment_item_edit)
+        }
+        logout.setOnClickListener{
+            Log.v(TAG, "LOGOUT")
+            AuthRepository.logout()
+            findNavController().navigate(R.id.fragment_login)
         }
     }
 
@@ -64,7 +71,7 @@ class PlantListFragment : Fragment() {
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
             }
         }
-        itemsModel.loadItems()
+        itemsModel.refresh()
     }
 
     override fun onDestroy() {

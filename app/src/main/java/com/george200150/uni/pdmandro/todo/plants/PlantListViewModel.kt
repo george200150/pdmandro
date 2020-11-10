@@ -1,37 +1,44 @@
 package com.george200150.uni.pdmandro.todo.plants
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
-import com.george200150.uni.pdmandro.core.Result
-import com.george200150.uni.pdmandro.core.TAG
 import com.george200150.uni.pdmandro.todo.data.Plant
+import com.george200150.uni.pdmandro.todo.data.local.PlantDatabase
 import com.george200150.uni.pdmandro.todo.data.PlantRepository
+import com.george200150.uni.pdmandro.core.TAG
+import com.george200150.uni.pdmandro.core.Result
+import kotlinx.coroutines.launch
 
-class PlantListViewModel : ViewModel() {
-    private val mutableItems = MutableLiveData<List<Plant>>().apply { value = emptyList() }
+class PlantListViewModel (application: Application) : AndroidViewModel(application) {
     private val mutableLoading = MutableLiveData<Boolean>().apply { value = false }
     private val mutableException = MutableLiveData<Exception>().apply { value = null }
 
-    val items: LiveData<List<Plant>> = mutableItems
+    val items: LiveData<List<Plant>>
     val loading: LiveData<Boolean> = mutableLoading
     val loadingError: LiveData<Exception> = mutableException
 
-    fun loadItems() {
+    private val plantRepository: PlantRepository
+    init {
+        val carDao = PlantDatabase.getDatabase(application,viewModelScope).plantDao()
+        plantRepository = PlantRepository(carDao)
+        items = plantRepository.items
+    }
+
+    fun refresh() {
         viewModelScope.launch {
-            Log.v(TAG, "loadItems...");
+            Log.v(TAG, "refresh...");
             mutableLoading.value = true
             mutableException.value = null
-            when (val result = PlantRepository.loadAll()) {
+            when (val result = plantRepository.refresh()) {
                 is Result.Success -> {
-                    Log.d(TAG, "loadItems succeeded");
-                    mutableItems.value = result.data
+                    Log.d(TAG, "refresh succeeded");
                 }
                 is Result.Error -> {
-                    Log.w(TAG, "loadItems failed", result.exception);
+                    Log.w(TAG, "refresh failed", result.exception);
                     mutableException.value = result.exception
                 }
             }

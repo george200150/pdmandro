@@ -1,19 +1,20 @@
 package com.george200150.uni.pdmandro.auth.login
 
+import android.app.Application
 import android.util.Log
 import android.util.Patterns
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import com.george200150.uni.pdmandro.R
 import com.george200150.uni.pdmandro.auth.data.AuthRepository
 import com.george200150.uni.pdmandro.auth.data.TokenHolder
 import com.george200150.uni.pdmandro.core.Result
 import com.george200150.uni.pdmandro.core.TAG
+import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mutableLoginFormState = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = mutableLoginFormState

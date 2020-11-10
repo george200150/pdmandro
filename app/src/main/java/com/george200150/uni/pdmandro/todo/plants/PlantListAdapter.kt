@@ -32,10 +32,6 @@ class PlantListAdapter(
             val item = view.tag as Plant
             fragment.findNavController().navigate(R.id.fragment_item_edit, Bundle().apply {
                 putString(PlantEditFragment.ITEM_ID, item._id)
-                putBoolean(PlantEditFragment.FLOWERS,item.hasFlowers)
-                putString(PlantEditFragment.BLOOM,item.bloomDate)
-                putString(PlantEditFragment.LOCATION,item.location)
-                putString(PlantEditFragment.PHOTO,item.photo)
             })
         }
     }
