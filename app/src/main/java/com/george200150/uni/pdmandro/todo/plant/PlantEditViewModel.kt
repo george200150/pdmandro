@@ -25,8 +25,8 @@ class PlantEditViewModel(application: Application) : AndroidViewModel(applicatio
     val plantRepository: PlantRepository
 
     init {
-        val carDao = PlantDatabase.getDatabase(application, viewModelScope).plantDao()
-        plantRepository = PlantRepository(carDao)
+        val plantDao = PlantDatabase.getDatabase(application, viewModelScope).plantDao()
+        plantRepository = PlantRepository(plantDao)
     }
 
     fun getItemById(itemId: String): LiveData<Plant> {

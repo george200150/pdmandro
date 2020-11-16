@@ -7,8 +7,8 @@ import com.george200150.uni.pdmandro.todo.data.Plant
 @Dao
 interface PlantDao {
 
-    @Query("SELECT * FROM plants ORDER BY name ASC")
-    fun getAll(): LiveData<List<Plant>>
+    @Query("SELECT * FROM plants WHERE userId=:userId ORDER BY name ASC")
+    fun getAll(userId: String): LiveData<List<Plant>>
 
     @Query("SELECT * FROM plants WHERE _id=:id")
     fun getById(id: String): LiveData<Plant>

@@ -1,21 +1,33 @@
 package com.george200150.uni.pdmandro.todo.data
 
-import com.george200150.uni.pdmandro.core.Result
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import com.george200150.uni.pdmandro.core.Constants
+import com.george200150.uni.pdmandro.core.Result
 import com.george200150.uni.pdmandro.todo.data.local.PlantDao
 import com.george200150.uni.pdmandro.todo.data.remote.PlantApi
 
 class PlantRepository(private val plantDao: PlantDao) {
-    val items = plantDao.getAll()
+
+    //val items = plantDao.getAll()
+    val plants = MediatorLiveData<List<Plant>>().apply { postValue(emptyList()) }
 
     suspend fun refresh(): Result<Boolean> {
         try {
-            val items = PlantApi.service.find()
-            for (item in items) {
-                plantDao.insert(item)
+            val plantsApi = PlantApi.service.find()
+            plants.value = plantsApi
+            for (plant in plantsApi) {
+                //plant.userId = Constants.instance()?.fetchValueString("_id")!!
+                plantDao.insert(plant)
             }
             return Result.Success(true)
-        } catch (e: Exception) {
+        } catch (e: Exception) { // handle offline mode
+
+            val userId = Constants.instance()?.fetchValueString("_id")
+            plants.addSource(plantDao.getAll(userId!!)) {
+                plants.value = it
+            }
+
             return Result.Error(e)
         }
     }

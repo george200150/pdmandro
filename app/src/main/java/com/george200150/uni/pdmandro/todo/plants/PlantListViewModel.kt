@@ -23,22 +23,22 @@ class PlantListViewModel (application: Application) : AndroidViewModel(applicati
 
     private val plantRepository: PlantRepository
     init {
-        val carDao = PlantDatabase.getDatabase(application,viewModelScope).plantDao()
-        plantRepository = PlantRepository(carDao)
-        items = plantRepository.items
+        val plantDao = PlantDatabase.getDatabase(application,viewModelScope).plantDao()
+        plantRepository = PlantRepository(plantDao)
+        items = plantRepository.plants
     }
 
     fun refresh() {
         viewModelScope.launch {
-            Log.v(TAG, "refresh...");
+            Log.v(TAG, "refresh...")
             mutableLoading.value = true
             mutableException.value = null
             when (val result = plantRepository.refresh()) {
                 is Result.Success -> {
-                    Log.d(TAG, "refresh succeeded");
+                    Log.d(TAG, "refresh succeeded")
                 }
                 is Result.Error -> {
-                    Log.w(TAG, "refresh failed", result.exception);
+                    Log.w(TAG, "refresh failed", result.exception)
                     mutableException.value = result.exception
                 }
             }

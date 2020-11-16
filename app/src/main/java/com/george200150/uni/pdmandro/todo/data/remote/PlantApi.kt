@@ -26,4 +26,8 @@ object PlantApi {
     }
 
     val service: Service = Api.retrofit.create(Service::class.java)
+
+    // TODO: websocket notifications + local storage
+    // ambele aplicatii sa aiba local storage (fara net)
+    // ambele aplicatii implementeze notificationr (din una in alta sa apara)
 }

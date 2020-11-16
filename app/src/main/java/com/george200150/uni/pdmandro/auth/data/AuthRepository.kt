@@ -27,7 +27,8 @@ object AuthRepository {
         val result = RemoteAuthDataSource.login(user)
         if (result is Result.Success<TokenHolder>) {
             setLoggedInUser(user, result.data)
-            Constants.instance()?.storeValueString("token",result.data.token);
+            Constants.instance()?.storeValueString("token",result.data.token)
+            Constants.instance()?.storeValueString("_id", result.data._id) // added ownership data to local storage
         }
         return result
     }

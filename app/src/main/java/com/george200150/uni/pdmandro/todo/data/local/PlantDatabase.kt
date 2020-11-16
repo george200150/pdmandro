@@ -18,6 +18,9 @@ abstract class PlantDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: PlantDatabase? = null
 
+        fun getDBByPassMaybe(): PlantDatabase? {
+            return INSTANCE
+        }
         //@kotlinx.coroutines.InternalCoroutinesApi()
         fun getDatabase(context: Context, scope: CoroutineScope): PlantDatabase {
             val inst = INSTANCE
@@ -31,6 +34,8 @@ abstract class PlantDatabase : RoomDatabase() {
                     "plant_db"
                 )
                     .addCallback(WordDatabaseCallback(scope))
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
                     .build()
             INSTANCE = instance
             return instance
@@ -50,7 +55,7 @@ abstract class PlantDatabase : RoomDatabase() {
         }
 
         suspend fun populateDatabase(itemDao: PlantDao) {
-            itemDao.deleteAll()
+            //itemDao.deleteAll()
         }
     }
 }
