@@ -6,11 +6,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.george200150.uni.pdmandro.todo.data.Plant
-import com.george200150.uni.pdmandro.todo.data.local.PlantDatabase
-import com.george200150.uni.pdmandro.todo.data.PlantRepository
-import com.george200150.uni.pdmandro.core.TAG
 import com.george200150.uni.pdmandro.core.Result
+import com.george200150.uni.pdmandro.core.TAG
+import com.george200150.uni.pdmandro.todo.data.Plant
+import com.george200150.uni.pdmandro.todo.data.PlantRepository
+import com.george200150.uni.pdmandro.todo.data.local.PlantDatabase
+import com.george200150.uni.pdmandro.todo.data.remote.PlantApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PlantListViewModel (application: Application) : AndroidViewModel(application) {
@@ -22,10 +25,22 @@ class PlantListViewModel (application: Application) : AndroidViewModel(applicati
     val loadingError: LiveData<Exception> = mutableException
 
     private val plantRepository: PlantRepository
+
     init {
-        val plantDao = PlantDatabase.getDatabase(application,viewModelScope).plantDao()
+        val plantDao = PlantDatabase.getDatabase(application, viewModelScope).plantDao()
         plantRepository = PlantRepository(plantDao)
         items = plantRepository.plants
+
+        CoroutineScope(Dispatchers.Main).launch { collectEvents() }
+    }
+
+    suspend fun collectEvents() {
+        while (true) {
+            val event = PlantApi.RemoteDataSource.eventChannel.receive()
+            Log.d("ws", event)
+            Log.d("MainActivity", "received $event")
+            refresh()
+        }
     }
 
     fun refresh() {
