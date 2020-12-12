@@ -54,7 +54,7 @@ object PlantApi {
                 val json =
                     "{\"type\":\"authorization\",\"payload\":{\"token\":\"$token\"}}"
                     //"{\"type\":\"authorization\",\"payload\":{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImIiLCJfaWQiOiJ2STFHTWt6QnphNWk4Mnp6IiwiaWF0IjoxNjA1NjI5MDU4LCJleHAiOjE2MDU4NDUwNTh9.GepIJPYh_qR-5nRNIULd--7cT5tdfhJhmzSQKTApVzA\"}}"
-                Log.d("json", json)
+                Log.d("WS: json", json)
                 webSocket.send(json)
             }
 

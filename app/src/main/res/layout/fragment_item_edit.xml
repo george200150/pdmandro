@@ -98,7 +98,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/plant_has_flowers"
-        android:text=""
+        android:text="location"
         android:layout_marginTop="@dimen/text_margin" />
 
     <Button

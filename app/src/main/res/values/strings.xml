@@ -22,4 +22,5 @@
     <string name="logout">Logout</string>
     <string name="log_out">Log out</string>
     <string name="delete_plant">Delete Plant</string>
+    <string name="hasnt_flowers">No Flowers</string>
 </resources>
