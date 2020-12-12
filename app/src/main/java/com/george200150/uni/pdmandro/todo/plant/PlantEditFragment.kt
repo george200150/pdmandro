@@ -32,6 +32,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
+import kotlin.random.Random
 
 class PlantEditFragment : Fragment() {
     companion object {
@@ -195,9 +196,10 @@ class PlantEditFragment : Fragment() {
             }
         })
         val id = plantId
+
         if (id == null) {
             plant = Plant(
-                "-1",
+                "",
                 AuthRepository.getUsername(),
                 "name",
                 true,
