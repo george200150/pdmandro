@@ -1,33 +1,47 @@
 package com.george200150.uni.pdmandro.todo.plant
 
-import android.os.Build
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.george200150.uni.pdmandro.R
+import com.george200150.uni.pdmandro.auth.data.AuthRepository
 import com.george200150.uni.pdmandro.core.TAG
 import com.george200150.uni.pdmandro.todo.data.Plant
+import com.george200150.uni.pdmandro.todo.data.local.LocationHelper
 import kotlinx.android.synthetic.main.fragment_item_edit.*
-import java.time.LocalDate
-import java.time.LocalDateTime
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PlantEditFragment : Fragment() {
     companion object {
-        const val ITEM_ID = "_ID"
+        const val ITEM_ID = "ITEM_ID"
     }
 
     private lateinit var viewModel: PlantEditViewModel
     private var plantId: String? = null
     private var plant: Plant? = null
+
+    private val REQUEST_PERMISSION = 10
+    private val REQUEST_IMAGE_CAPTURE = 1
+    lateinit var currentPhotoPath: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +53,12 @@ class PlantEditFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkCameraPermission()
+        initPlantLocation()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,46 +67,116 @@ class PlantEditFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_item_edit, container, false)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.v(TAG, "onActivityCreated")
         setupViewModel()
         fab.setOnClickListener {
-            Log.v(TAG, "save item")
+            Log.v(TAG, "save plant")
             val i = plant
             if (i != null) {
-                i.name = plant_name.text.toString()
-                i.hasFlowers = plant_has_flowers.isChecked
-                i.location = plant_location.text.toString();
-                i.photo = plant_photo.text.toString();
-                val day: Int = bloom_date.dayOfMonth
-                val month: Int = bloom_date.month + 1
-                val year: Int = bloom_date.year
-                val date = LocalDate.of(year, month, day)
-                i.bloomDate = date.toString()
-                viewModel.saveOrUpdateItem(i)
-
+                i.name = movie_name.text.toString()
+                i.length = movie_length.text.toString().toInt()
+                i.releaseDate = movie_date.text.toString()
+                i.isWatched = movie_is_watched.text.toString().toBoolean()
+                viewModel.saveOrUpdateMovie(i)
             }
         }
-        button_delete.setOnClickListener {
-            if (plant != null) {
-                viewModel.deleteItem(plant!!._id)
-            }
 
+        delete_button.setOnClickListener {
+            viewModel.deletePlant(plantId ?: "")
+            findNavController().navigate(R.id.fragment_movie_list)
         }
 
+        btCapturePhoto.setOnClickListener { openCamera() }
 
+        btnLocation.setOnClickListener {
+            LocationHelper.setPinLocation(plant?.latitude!!, plant?.longitude!!)
+            val intent = Intent(requireContext(), EventsActivity::class.java)
+            startActivity(intent)
+        }
+
+        txtLocation.setOnClickListener {
+            if (plant != null && plant?.latitude != null && plant?.longitude != null) {
+                LocationHelper.setPinLocation(plant?.latitude!!, plant?.longitude!!)
+                val intent = Intent(requireContext(), BasicMapActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.CAMERA),
+                REQUEST_PERMISSION
+            )
+        }
+    }
+
+    private fun openCamera() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
+            intent.resolveActivity(requireActivity().packageManager)?.also {
+                val photoFile: File? = try {
+                    createCapturedPhoto()
+                } catch (ex: IOException) {
+                    null
+                }
+                Log.d(TAG, "photofile $photoFile")
+                photoFile?.also {
+                    val photoURI = FileProvider.getUriForFile(
+                        requireContext(),
+                        "com.example.mymovies.fileprovider",
+                        it
+                    )
+                    Log.d(TAG, "photoURI: $photoURI");
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+                }
+            }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createCapturedPhoto(): File {
+        val timestamp: String = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
+        val storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        var f = File.createTempFile("PHOTO_${timestamp}", ".jpg", storageDir).apply {
+            currentPhotoPath = absolutePath
+        }
+        plant?.imageURI = currentPhotoPath
+        return f
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == AppCompatActivity.RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                val uri = Uri.parse(currentPhotoPath)
+                ivImage.setImageURI(uri)
+            }
+        }
+    }
+
+    private fun initPlantLocation() {
+        val location = LocationHelper.getLocationAndClear()
+        if (location.first != 0f || location.second != 0f) {
+            txtLocation.text = "${location.first} ${location.second}"
+            plant?.latitude = location.first
+            plant?.longitude = location.second
+        }
+    }
+
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this).get(PlantEditViewModel::class.java)
-        viewModel.fetching.observe(viewLifecycleOwner) { fetching ->
+        viewModel.fetching.observe(viewLifecycleOwner, { fetching ->
             Log.v(TAG, "update fetching")
             progress.visibility = if (fetching) View.VISIBLE else View.GONE
-        }
-        viewModel.fetchingError.observe(viewLifecycleOwner) { exception ->
+        })
+        viewModel.fetchingError.observe(viewLifecycleOwner, { exception ->
             if (exception != null) {
                 Log.v(TAG, "update fetching error")
                 val message = "Fetching exception ${exception.message}"
@@ -95,30 +185,47 @@ class PlantEditFragment : Fragment() {
                     Toast.makeText(parentActivity, message, Toast.LENGTH_SHORT).show()
                 }
             }
-        }
-        viewModel.completed.observe(viewLifecycleOwner) { completed ->
+        })
+        viewModel.completed.observe(viewLifecycleOwner, { completed ->
             if (completed) {
                 Log.v(TAG, "completed, navigate back")
                 findNavController().popBackStack()
             }
-        }
+        })
         val id = plantId
         if (id == null) {
-            plant = Plant("", "", "", false, "", "", "")
+            plant = Plant(
+                "",
+                "",
+                0,
+                "01-01-1000",
+                false,
+                AuthRepository.getUsername(),
+                true,
+                "",
+                0,
+                "",
+                0f,
+                0f
+            )
         } else {
-            viewModel.getItemById(id).observe(viewLifecycleOwner) {
+            viewModel.getPlantById(id).observe(viewLifecycleOwner, {
                 Log.v(TAG, "update items")
                 if (it != null) {
                     plant = it
-                    plant_name.setText(plant!!.name)
-                    plant_location.setText(plant!!.location)
-                    plant_has_flowers.isChecked = plant!!.hasFlowers
-                    if (plant!!.bloomDate.isNotEmpty()) {
-                        val date = LocalDate.parse(plant!!.bloomDate);
-                        bloom_date.updateDate(date.year, date.monthValue, date.dayOfMonth)
+                    plant!!.openTime = Date().time
+                    movie_name.setText(it.name)
+                    movie_length.setText(it.length.toString())
+                    movie_date.setText(it.releaseDate)
+                    movie_is_watched.setText(it.isWatched.toString())
+                    if (!plant?.imageURI.isNullOrBlank()) {
+                        ivImage.setImageURI(Uri.parse(plant?.imageURI))
+                        Log.d(TAG, "change image to ${plant?.imageURI}")
                     }
+                    txtLocation.text = "${it.latitude} ${it.longitude}"
                 }
-            }
+            })
         }
     }
+
 }

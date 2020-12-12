@@ -18,9 +18,6 @@ abstract class PlantDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: PlantDatabase? = null
 
-        fun getDBByPassMaybe(): PlantDatabase? {
-            return INSTANCE
-        }
         //@kotlinx.coroutines.InternalCoroutinesApi()
         fun getDatabase(context: Context, scope: CoroutineScope): PlantDatabase {
             val inst = INSTANCE

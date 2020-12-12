@@ -7,15 +7,9 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.george200150.uni.pdmandro.core.Constants
 import com.george200150.uni.pdmandro.core.TAG
-import com.george200150.uni.pdmandro.todo.data.remote.PlantApi
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-
-    var isActive = false;
 
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,25 +29,6 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        isActive = true
-        CoroutineScope(Dispatchers.Main).launch { collectEvents() }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        isActive = false
-    }
-
-    private suspend fun collectEvents() {
-        while (isActive) {
-            val event = PlantApi.RemoteDataSource.eventChannel.receive()
-            Log.d("ws", event)
-            Log.d("MainActivity", "received $event")
         }
     }
 }

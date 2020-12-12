@@ -13,11 +13,43 @@
         android:indeterminate="true"
         android:visibility="gone" />
 
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="search" />
+
+    <CheckBox
+        android:id="@+id/hasFlowers"
+        android:layout_width="wrap_content"
+        android:text="@string/hasFlowers"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/search"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/noFlowers"
+        android:layout_width="wrap_content"
+        android:text="no flowers"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/search"
+        app:layout_constraintTop_toBottomOf="@id/hasFlowers" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager" />
+
+    <Button
+        android:id="@+id/log_out_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/log_out"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

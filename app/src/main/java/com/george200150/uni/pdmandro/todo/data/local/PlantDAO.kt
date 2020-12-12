@@ -7,8 +7,11 @@ import com.george200150.uni.pdmandro.todo.data.Plant
 @Dao
 interface PlantDao {
 
-    @Query("SELECT * FROM plants WHERE userId=:userId ORDER BY name ASC")
-    fun getAll(userId: String): LiveData<List<Plant>>
+    @Query("SELECT * FROM plants WHERE username=:username ORDER BY name ASC")
+    fun getAll(username: String): LiveData<List<Plant>>
+
+    @Query("SELECT * from plants WHERE username=:username ORDER BY name ASC")
+    fun getAllSimple(username: String): List<Plant>
 
     @Query("SELECT * FROM plants WHERE _id=:id")
     fun getById(id: String): LiveData<Plant>
@@ -24,4 +27,7 @@ interface PlantDao {
 
     @Query("DELETE FROM plants")
     suspend fun deleteAll()
+
+    @Query("DELETE FROM plants WHERE name=:name")
+    suspend fun deleteByName(name: String)
 }

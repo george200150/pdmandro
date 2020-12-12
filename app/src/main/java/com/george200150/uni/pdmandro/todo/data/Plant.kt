@@ -7,12 +7,15 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "plants")
 data class Plant(
     @PrimaryKey @ColumnInfo(name = "_id") val _id: String,
-    @ColumnInfo(name = "userId") val userId: String,
+    @ColumnInfo(name = "username") var username: String,
     @ColumnInfo(name = "name") var name: String,
     @ColumnInfo(name = "hasFlowers") var hasFlowers: Boolean,
     @ColumnInfo(name = "bloomDate") var bloomDate: String,
-    @ColumnInfo(name = "location") var location: String,
-    @ColumnInfo(name = "photo") var photo: String
+    @ColumnInfo(name = "upToDateWithBackend") var upToDateWithBackend: Boolean?,
+    @ColumnInfo(name = "backendUpdateType") var backendUpdateType: String?,
+    @ColumnInfo(name = "imageURI") var imageURI: String?,
+    @ColumnInfo(name = "latitude") var latitude: Float?,
+    @ColumnInfo(name = "longitude") var longitude: Float?,
 ) {
     override fun toString(): String = name
 }

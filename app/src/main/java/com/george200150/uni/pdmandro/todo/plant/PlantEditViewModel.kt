@@ -12,12 +12,10 @@ import com.george200150.uni.pdmandro.todo.data.local.PlantDatabase
 
 
 class PlantEditViewModel(application: Application) : AndroidViewModel(application) {
-    //private val mutableItem = MutableLiveData<Plant>().apply { value = Plant("", "", hasFlowers = false, bloomDate = "", location = "", photo = "") }
     private val mutableFetching = MutableLiveData<Boolean>().apply { value = false }
     private val mutableCompleted = MutableLiveData<Boolean>().apply { value = false }
     private val mutableException = MutableLiveData<Exception>().apply { value = null }
 
-    //val plant: LiveData<Plant> = mutableItem
     val fetching: LiveData<Boolean> = mutableFetching
     val fetchingError: LiveData<Exception> = mutableException
     val completed: LiveData<Boolean> = mutableCompleted
@@ -29,13 +27,13 @@ class PlantEditViewModel(application: Application) : AndroidViewModel(applicatio
         plantRepository = PlantRepository(plantDao)
     }
 
-    fun getItemById(itemId: String): LiveData<Plant> {
-        Log.v(TAG, "getItemById...")
+    fun getPlantById(itemId: String): LiveData<Plant> {
+        Log.v(TAG, "getPlantById...")
         return plantRepository.getById(itemId)
     }
 
 
-    fun saveOrUpdateItem(plant: Plant) {
+    fun saveOrUpdatePlant(plant: Plant) {
         viewModelScope.launch {
             Log.v(TAG, "saveOrUpdateItem...")
             mutableFetching.value = true
@@ -48,10 +46,10 @@ class PlantEditViewModel(application: Application) : AndroidViewModel(applicatio
             }
             when (result) {
                 is Result.Success -> {
-                    Log.d(TAG, "saveOrUpdateItem succeeded");
+                    Log.d(TAG, "saveOrUpdatePlant succeeded");
                 }
                 is Result.Error -> {
-                    Log.w(TAG, "saveOrUpdateItem failed", result.exception);
+                    Log.w(TAG, "saveOrUpdatePlant failed", result.exception);
                     mutableException.value = result.exception
                 }
             }
@@ -60,11 +58,11 @@ class PlantEditViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun deleteItem(itemId: String)
+    fun deletePlant(itemId: String)
     {
         viewModelScope.launch {
-            mutableFetching.value = true
-            mutableException.value = null
+//            mutableFetching.value = true
+//            mutableException.value = null
             val result: Result<Boolean> = plantRepository.delete(itemId)
             when (result) {
                 is Result.Success -> {
@@ -76,8 +74,8 @@ class PlantEditViewModel(application: Application) : AndroidViewModel(applicatio
                     mutableException.value = result.exception
                 }
             }
-            mutableCompleted.value = true
-            mutableFetching.value = false
+//            mutableCompleted.value = true
+//            mutableFetching.value = false
         }
     }
 }

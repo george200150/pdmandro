@@ -11,90 +11,118 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:visibility="gone" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="@string/name"/>
-        <EditText
-            android:id="@+id/plant_name"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:autofillHints="plant" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="50dp"
-        android:layout_height="50dp">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="@string/hasFlowers" />
-        <CheckBox
-            android:id="@+id/plant_has_flowers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="100dp"
-        android:layout_height="50dp">
-
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"/>
-        <DatePicker
-            android:id="@+id/bloom_date"
-            android:layout_width="254dp"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="150dp"
-        android:layout_height="50dp">
-
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="@string/location" />
-
-        <EditText
-            android:id="@+id/plant_location"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="200dp"
-        android:layout_height="50dp">
-
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="@string/photo" />
-
-        <EditText
-            android:id="@+id/plant_photo"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/button_delete"
-        android:layout_gravity="bottom"
+    <TextView
+        android:id="@+id/view_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:text="@string/delete"/>
+        android:text="Movie name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/movie_name"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_name" />
+
+    <TextView
+        android:id="@+id/view_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Length"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_name" />
+
+    <EditText
+        android:id="@+id/movie_length"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_length" />
+
+    <TextView
+        android:id="@+id/view_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_length" />
+
+    <EditText
+        android:id="@+id/movie_date"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_date" />
+
+    <TextView
+        android:id="@+id/view_is_watched"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Watched"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_date" />
+
+    <EditText
+        android:id="@+id/movie_is_watched"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_is_watched" />
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete movie"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_is_watched" />
+
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="@dimen/text_margin"
+        android:src="#dedede"
+        app:layout_constraintStart_toStartOf="@id/delete_button"
+        app:layout_constraintTop_toBottomOf="@id/delete_button" />
+
+    <Button
+        android:id="@+id/btCapturePhoto"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Capture Photo"
+        app:layout_constraintBottom_toBottomOf="@id/ivImage"
+        app:layout_constraintStart_toEndOf="@id/ivImage"
+        app:layout_constraintTop_toTopOf="@id/ivImage" />
+
+    <TextView
+        android:id="@+id/txtLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_is_watched"
+        android:text=""
+        android:layout_marginTop="@dimen/text_margin" />
+
+    <Button
+        android:id="@+id/btnLocation"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="update Location"
+        app:layout_constraintTop_toBottomOf="@id/txtLocation"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -102,6 +130,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_save" />
 
 </FrameLayout>

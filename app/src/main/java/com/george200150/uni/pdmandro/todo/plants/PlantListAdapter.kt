@@ -1,5 +1,6 @@
 package com.george200150.uni.pdmandro.todo.plants
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,21 +20,34 @@ class PlantListAdapter(
     private val fragment: Fragment
 ) : RecyclerView.Adapter<PlantListAdapter.ViewHolder>() {
 
-    var items = emptyList<Plant>()
+    var plants = emptyList<Plant>()
         set(value) {
             field = value
             notifyDataSetChanged();
         }
 
-    private var onItemClick: View.OnClickListener;
+    private var onPlantClick: View.OnClickListener;
 
     init {
-        onItemClick = View.OnClickListener { view ->
-            val item = view.tag as Plant
+        onPlantClick = View.OnClickListener { view ->
+            val plant = view.tag as Plant
             fragment.findNavController().navigate(R.id.fragment_item_edit, Bundle().apply {
-                putString(PlantEditFragment.ITEM_ID, item._id)
+                putString(PlantEditFragment.ITEM_ID, plant._id)
             })
         }
+    }
+
+    fun searchAndFilter(s: String, hasFlowers: String): MutableList<Plant> {
+        val filteredList: MutableList<Plant> = ArrayList()
+        val s2 = s.toLowerCase().trim()
+        for (plant in plants) {
+            if (s2.isNotEmpty() && !plant.name.contains(s2))
+                continue
+            if (hasFlowers.isNotEmpty() && plant.hasFlowers.toString() != hasFlowers)
+                continue
+            filteredList.add(plant)
+        }
+        return filteredList
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,13 +59,18 @@ class PlantListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.v(TAG, "onBindViewHolder $position")
-        val item = items[position]
-        holder.itemView.tag = item
-        holder.textView.text = item.name
-        holder.itemView.setOnClickListener(onItemClick)
+        val plant = plants[position]
+        holder.itemView.tag = plant
+        holder.textView.text = plant.name
+        holder.length.text = plant.length.toString()
+        holder.releaseDate.date.text = plant.releaseDate
+        holder.isWatched.isWatched.text = plant.isWatched.toString()
+        holder.itemView.setOnClickListener(onPlantClick)
+        holder.ivImage.setImageURI(Uri.parse(plant.imageURI))
+        holder.itemView.setOnClickListener(onPlantClick)
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = plants.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.text

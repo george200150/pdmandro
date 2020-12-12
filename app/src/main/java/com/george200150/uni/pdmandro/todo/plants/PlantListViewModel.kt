@@ -20,16 +20,16 @@ class PlantListViewModel (application: Application) : AndroidViewModel(applicati
     private val mutableLoading = MutableLiveData<Boolean>().apply { value = false }
     private val mutableException = MutableLiveData<Exception>().apply { value = null }
 
-    val items: LiveData<List<Plant>>
+    val plants: LiveData<List<Plant>>
     val loading: LiveData<Boolean> = mutableLoading
     val loadingError: LiveData<Exception> = mutableException
 
-    private val plantRepository: PlantRepository
+    val plantRepository: PlantRepository
 
     init {
         val plantDao = PlantDatabase.getDatabase(application, viewModelScope).plantDao()
         plantRepository = PlantRepository(plantDao)
-        items = plantRepository.plants
+        plants = plantRepository.plants
 
         CoroutineScope(Dispatchers.Main).launch { collectEvents() }
     }

@@ -66,7 +66,7 @@ class LoginFragment : Fragment() {
         login.setOnClickListener {
             loading.visibility = View.VISIBLE
             error_text.visibility = View.GONE
-            viewModel.login(username.text.toString(), password.text.toString())
+            viewModel.login(username.text.toString(), password.text.toString(),requireContext())
         }
     }
 }

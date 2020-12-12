@@ -1,6 +1,7 @@
 package com.george200150.uni.pdmandro.auth.login
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
@@ -22,10 +23,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val mutableLoginResult = MutableLiveData<Result<TokenHolder>>()
     val loginResult: LiveData<Result<TokenHolder>> = mutableLoginResult
 
-    fun login(username: String, password: String) {
+    fun login(username: String, password: String, context: Context) {
         viewModelScope.launch {
             Log.v(TAG, "login...");
-            mutableLoginResult.value = AuthRepository.login(username, password)
+            mutableLoginResult.value = AuthRepository.login(username, password, context)
         }
     }
 

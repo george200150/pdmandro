@@ -19,7 +19,9 @@
 
         <action
             android:id="@+id/action_ItemListFragment_to_ItemEditFragment"
-            app:destination="@id/fragment_item_edit" />
+            app:destination="@id/fragment_item_edit"
+            app:popUpTo="@id/fragment_item_list"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/fragment_item_edit"
@@ -29,6 +31,8 @@
 
         <action
             android:id="@+id/action_ItemEditFragment_to_ItemListFragment"
-            app:destination="@id/fragment_item_list" />
+            app:destination="@id/fragment_item_list"
+            app:popUpTo="@id/fragment_item_list"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

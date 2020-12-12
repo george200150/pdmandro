@@ -4,11 +4,13 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class TokenInterceptor constructor() : Interceptor {
-  var token: String? = Constants.instance()?.fetchValueString("token")
+  //var token: String? = Constants.instance()?.fetchValueString("token")
+  var token: String? = null
 
   override fun intercept(chain: Interceptor.Chain): Response {
     val original = chain.request()
     val originalUrl = original.url()
+    //val originalUrl = original.url
     if (token == null) {
       return chain.proceed(original)
     }

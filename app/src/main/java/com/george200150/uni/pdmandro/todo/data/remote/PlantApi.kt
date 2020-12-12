@@ -16,7 +16,7 @@ import retrofit2.Response
 
 object PlantApi {
 
-    private const val WSURL = "ws://192.168.1.5:3000" // "ws://192.168.0.150:3000"
+    private const val WSURL = "ws://192.168.1.2:3000"
 
     interface Service {
         @GET("/api/plant")
