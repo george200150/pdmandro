@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,10 +18,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/view_name"
+        android:id="@+id/plant_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Movie name"
+        android:text="@string/name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,23 +31,7 @@
         android:layout_height="60dp"
         android:text=""
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_name" />
-
-    <TextView
-        android:id="@+id/view_length"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Length"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/movie_name" />
-
-    <EditText
-        android:id="@+id/movie_length"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text=""
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_length" />
+        app:layout_constraintTop_toBottomOf="@id/plant_name" />
 
     <TextView
         android:id="@+id/view_date"
@@ -55,10 +39,10 @@
         android:layout_height="wrap_content"
         android:text="Date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/movie_length" />
+        app:layout_constraintTop_toBottomOf="@id/movie_name" />
 
     <EditText
-        android:id="@+id/movie_date"
+        android:id="@+id/plant_date"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text=""
@@ -66,28 +50,28 @@
         app:layout_constraintTop_toBottomOf="@id/view_date" />
 
     <TextView
-        android:id="@+id/view_is_watched"
+        android:id="@+id/view_has_flowers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Watched"
+        android:text="@string/hasFlowers"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/movie_date" />
+        app:layout_constraintTop_toBottomOf="@id/plant_date" />
 
     <EditText
-        android:id="@+id/movie_is_watched"
+        android:id="@+id/plant_has_flowers"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text=""
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_is_watched" />
+        app:layout_constraintTop_toBottomOf="@id/view_has_flowers" />
 
     <Button
         android:id="@+id/delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete movie"
+        android:text="@string/delete_plant"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/movie_is_watched" />
+        app:layout_constraintTop_toBottomOf="@id/plant_has_flowers" />
 
     <ImageView
         android:id="@+id/ivImage"
@@ -96,7 +80,8 @@
         android:layout_marginTop="@dimen/text_margin"
         android:src="#dedede"
         app:layout_constraintStart_toStartOf="@id/delete_button"
-        app:layout_constraintTop_toBottomOf="@id/delete_button" />
+        app:layout_constraintTop_toBottomOf="@id/delete_button"
+        android:contentDescription="Plant" />
 
     <Button
         android:id="@+id/btCapturePhoto"
@@ -112,7 +97,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/movie_is_watched"
+        app:layout_constraintTop_toBottomOf="@id/plant_has_flowers"
         android:text=""
         android:layout_marginTop="@dimen/text_margin" />
 
@@ -134,4 +119,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_save" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

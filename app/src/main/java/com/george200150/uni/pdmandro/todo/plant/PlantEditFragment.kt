@@ -24,10 +24,13 @@ import com.george200150.uni.pdmandro.auth.data.AuthRepository
 import com.george200150.uni.pdmandro.core.TAG
 import com.george200150.uni.pdmandro.todo.data.Plant
 import com.george200150.uni.pdmandro.todo.data.local.LocationHelper
+import com.george200150.uni.pdmandro.todo.maps.BasicMapActivity
+import com.george200150.uni.pdmandro.todo.maps.EventsActivity
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 class PlantEditFragment : Fragment() {
@@ -76,16 +79,15 @@ class PlantEditFragment : Fragment() {
             val i = plant
             if (i != null) {
                 i.name = movie_name.text.toString()
-                i.length = movie_length.text.toString().toInt()
-                i.releaseDate = movie_date.text.toString()
-                i.isWatched = movie_is_watched.text.toString().toBoolean()
-                viewModel.saveOrUpdateMovie(i)
+                i.hasFlowers = plant_has_flowers.text.toString().toBoolean()
+                i.bloomDate = plant_date.text.toString()
+                viewModel.saveOrUpdatePlant(i)
             }
         }
 
         delete_button.setOnClickListener {
             viewModel.deletePlant(plantId ?: "")
-            findNavController().navigate(R.id.fragment_movie_list)
+            findNavController().navigate(R.id.fragment_item_list)
         }
 
         btCapturePhoto.setOnClickListener { openCamera() }
@@ -129,7 +131,7 @@ class PlantEditFragment : Fragment() {
                 photoFile?.also {
                     val photoURI = FileProvider.getUriForFile(
                         requireContext(),
-                        "com.example.mymovies.fileprovider",
+                        "com.george200150.uni.pdmandro.fileprovider",
                         it
                     )
                     Log.d(TAG, "photoURI: $photoURI");
@@ -195,29 +197,26 @@ class PlantEditFragment : Fragment() {
         val id = plantId
         if (id == null) {
             plant = Plant(
-                "",
-                "",
-                0,
-                "01-01-1000",
-                false,
+                "-1",
                 AuthRepository.getUsername(),
+                "name",
+                true,
+                LocalDate.now().toString(),
                 true,
                 "",
-                0,
                 "",
                 0f,
                 0f
             )
         } else {
             viewModel.getPlantById(id).observe(viewLifecycleOwner, {
-                Log.v(TAG, "update items")
+                Log.v(TAG, "update plants")
                 if (it != null) {
                     plant = it
-                    plant!!.openTime = Date().time
-                    movie_name.setText(it.name)
-                    movie_length.setText(it.length.toString())
-                    movie_date.setText(it.releaseDate)
-                    movie_is_watched.setText(it.isWatched.toString())
+                    plant_name.text = it.name
+                    plant_has_flowers.setText(it.hasFlowers.toString())
+                    plant_date.setText(it.bloomDate)
+
                     if (!plant?.imageURI.isNullOrBlank()) {
                         ivImage.setImageURI(Uri.parse(plant?.imageURI))
                         Log.d(TAG, "change image to ${plant?.imageURI}")

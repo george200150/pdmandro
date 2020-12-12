@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,10 +24,10 @@ class PlantListAdapter(
     var plants = emptyList<Plant>()
         set(value) {
             field = value
-            notifyDataSetChanged();
+            notifyDataSetChanged()
         }
 
-    private var onPlantClick: View.OnClickListener;
+    private var onPlantClick: View.OnClickListener
 
     init {
         onPlantClick = View.OnClickListener { view ->
@@ -61,11 +62,9 @@ class PlantListAdapter(
         Log.v(TAG, "onBindViewHolder $position")
         val plant = plants[position]
         holder.itemView.tag = plant
-        holder.textView.text = plant.name
-        holder.length.text = plant.length.toString()
-        holder.releaseDate.date.text = plant.releaseDate
-        holder.isWatched.isWatched.text = plant.isWatched.toString()
-        holder.itemView.setOnClickListener(onPlantClick)
+        holder.name.text = plant.name
+        holder.bloomDate.date.text = plant.bloomDate
+        holder.hasFlowers.text = plant.hasFlowers.toString()
         holder.ivImage.setImageURI(Uri.parse(plant.imageURI))
         holder.itemView.setOnClickListener(onPlantClick)
     }
@@ -73,6 +72,9 @@ class PlantListAdapter(
     override fun getItemCount() = plants.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.text
+        val name: TextView = view.name
+        val hasFlowers: TextView = view.hasFlowers
+        val bloomDate: TextView = view.date
+        val ivImage: ImageView = view.ivImage
     }
 }

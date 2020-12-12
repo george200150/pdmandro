@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.george200150.uni.pdmandro.core.Api
 import com.george200150.uni.pdmandro.core.Result
 import com.george200150.uni.pdmandro.auth.data.remote.RemoteAuthDataSource
+import com.george200150.uni.pdmandro.core.Constants
 
 
 object AuthRepository {
@@ -47,6 +48,7 @@ object AuthRepository {
             prefs = context.getSharedPreferences("com.george200150.uni.pdmandro", Context.MODE_PRIVATE)
         val editor = prefs!!.edit()
         editor.putString("token", tokenHolder.token)
+        Constants.instance()?.storeValueString("token",tokenHolder.token)
         editor.apply()
     }
 
